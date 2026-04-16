@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJECT RELAY // ARCHIVE</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #070707;
+      --bg-side:   #0b0b0b;
+      --bg-doc:    #090909;
+      --border:    #1e1700;
+      --border-md: #2e2200;
+      --amber:     #c89b14;
+      --amber-b:   #f0c040;
+      --amber-d:   #4e3a08;
+      --amber-g:   rgba(200,155,20,0.08);
+      --green:     #2eb85c;
+      --red:       #bb1f1f;
+      --red-b:     #ff2222;
+      --orange:    #b05800;
+      --white:     #d0ccbf;
+      --bar-h:     44px;
+      --side-w:    268px;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; background:var(--bg); color:var(--amber); font-family:'Share Tech Mono',monospace; overflow:hidden; }
+    body::before { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.11) 2px,rgba(0,0,0,0.11) 4px); pointer-events:none; z-index:999; }
+    body::after  { content:''; position:fixed; inset:0; background:radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,0.6) 100%); pointer-events:none; z-index:998; }
+    .topbar { position:fixed; top:0; left:0; right:0; height:var(--bar-h); background:var(--bg-side); border-bottom:1px solid var(--border-md); display:flex; align-items:center; justify-content:space-between; padding:0 18px; z-index:200; }
+    .topbar-left { display:flex; align-items:center; gap:14px; }
+    .menu-btn { display:none; background:none; border:1px solid var(--amber-d); color:var(--amber); font-family:'VT323',monospace; font-size:18px; padding:2px 8px; cursor:pointer; letter-spacing:2px; }
+    .menu-btn:hover { border-color:var(--amber); }
+    .topbar-title { font-family:'VT323',monospace; font-size:22px; letter-spacing:3px; color:var(--amber-b); }
+    .topbar-title a { color:var(--amber-d); text-decoration:none; font-size:14px; font-family:'Share Tech Mono',monospace; letter-spacing:1px; margin-right:12px; }
+    .topbar-title a:hover { color:var(--amber); }
+    .topbar-right { display:flex; align-items:center; gap:20px; font-size:12px; color:var(--amber-d); }
+    .status-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; animation:dot-blink 2s step-end infinite; }
+    .dot-green { background:var(--green); }
+    .dot-red   { background:var(--red-b); }
+    @keyframes dot-blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+    .layout { display:flex; height:calc(100vh - var(--bar-h)); margin-top:var(--bar-h); }
+    .sidebar { width:var(--side-w); min-width:var(--side-w); background:var(--bg-side); border-right:1px solid var(--border-md); overflow-y:auto; overflow-x:hidden; flex-shrink:0; transition:transform 0.22s ease; }
+    .sidebar::-webkit-scrollbar { width:4px; }
+    .sidebar::-webkit-scrollbar-track { background:var(--bg-side); }
+    .sidebar::-webkit-scrollbar-thumb { background:var(--amber-d); }
+    .sidebar-header { padding:18px 16px 12px; border-bottom:1px solid var(--border); }
+    .sidebar-header p { font-family:'VT323',monospace; font-size:16px; letter-spacing:2px; color:var(--amber-d); margin-top:3px; }
+    .cat-group { margin-bottom:4px; }
+    .cat-title { display:block; padding:10px 16px 4px; font-size:11px; letter-spacing:3px; color:var(--amber-d); text-transform:uppercase; user-select:none; }
+    .file-item { display:flex; align-items:center; gap:6px; padding:6px 16px 6px 24px; font-size:12px; color:var(--amber); cursor:pointer; border-left:2px solid transparent; transition:background 0.1s,border-color 0.1s,color 0.1s; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .file-item:hover { background:var(--amber-g); color:var(--amber-b); }
+    .file-item.active { background:rgba(200,155,20,0.14); border-left-color:var(--amber); color:var(--amber-b); }
+    .file-item .f-icon { color:var(--amber-d); flex-shrink:0; }
+    .file-item.hostile { color:#cc4444; }
+    .file-item.hostile:hover { color:var(--red-b); }
+    .file-item.hostile.active { border-left-color:var(--red-b); background:rgba(200,30,30,0.12); }
+    .hostile-badge { margin-left:auto; font-size:10px; color:var(--red-b); background:rgba(200,30,30,0.18); padding:1px 4px; flex-shrink:0; }
+    .sidebar-footer { padding:14px 16px; border-top:1px solid var(--border); margin-top:8px; font-size:11px; color:var(--amber-d); line-height:1.7; }
+    .viewer { flex:1; overflow-y:auto; overflow-x:hidden; background:var(--bg-doc); padding:32px 40px 60px; }
+    .viewer::-webkit-scrollbar { width:5px; }
+    .viewer::-webkit-scrollbar-track { background:var(--bg); }
+    .viewer::-webkit-scrollbar-thumb { background:var(--amber-d); }
+    .welcome { color:var(--amber-d); font-size:14px; line-height:2; padding:60px 20px; }
+    .welcome .big { font-family:'VT323',monospace; font-size:36px; color:var(--amber); letter-spacing:4px; margin-bottom:16px; display:block; }
+    .doc { animation:doc-in 0.18s ease; }
+    @keyframes doc-in { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:none;} }
+    .doc-class-bar { padding:5px 14px; font-family:'VT323',monospace; font-size:14px; letter-spacing:4px; margin-bottom:20px; border-left:4px solid; }
+    .class-RESTRICTED   { border-color:var(--amber);  background:rgba(200,155,20,0.07); color:var(--amber); }
+    .class-BEYOND-BLACK { border-color:var(--orange);  background:rgba(176,88,0,0.1);   color:#e07820; }
+    .class-OMEGA-BLACK  { border-color:var(--red-b);   background:rgba(200,30,30,0.1);   color:var(--red-b); }
+    .doc-meta { display:flex; flex-wrap:wrap; gap:0; font-size:12px; color:var(--amber-d); border:1px solid var(--border-md); margin-bottom:22px; }
+    .doc-meta-cell { padding:7px 16px; border-right:1px solid var(--border); }
+    .doc-meta-cell:last-child { border-right:none; }
+    .doc-meta-cell span { color:var(--amber); }
+    .doc-title { font-family:'VT323',monospace; font-size:30px; letter-spacing:3px; color:var(--amber-b); margin-bottom:6px; }
+    .doc-div { border:none; border-top:1px solid var(--border-md); margin:18px 0; }
+    .doc-content { color:var(--white); font-size:14px; line-height:1.85; }
+    .doc-content p { margin-bottom:14px; }
+    .doc-content p:last-child { margin-bottom:0; }
+    .sec { font-family:'VT323',monospace; font-size:17px; letter-spacing:2px; color:var(--amber); margin:22px 0 10px; display:block; }
+    .rd { background:var(--amber); color:var(--amber); user-select:none; padding:0 3px; cursor:default; }
+    .r02 { background:rgba(46,184,92,0.05); border-left:2px solid rgba(46,184,92,0.35); padding:12px 16px; margin:16px 0; font-size:13px; color:#b8d8c0; line-height:1.8; }
+    .r02 .r02-label { font-family:'VT323',monospace; font-size:15px; letter-spacing:2px; color:var(--green); display:block; margin-bottom:6px; }
+    .warn-box { border:1px solid var(--red-b); background:rgba(200,30,30,0.08); color:var(--red-b); padding:10px 16px; margin:16px 0; font-family:'VT323',monospace; font-size:16px; letter-spacing:1px; line-height:1.7; }
+    .note-box { border-left:2px solid var(--amber-d); padding:10px 16px; margin:16px 0; font-size:13px; color:var(--amber-d); line-height:1.75; font-style:italic; }
+    .note-box span { color:var(--amber); font-style:normal; }
+    .sig { margin-top:28px; padding-top:14px; border-top:1px solid var(--border-md); font-size:13px; color:var(--amber-d); line-height:1.8; }
+    .sig .sig-name { color:var(--amber); font-family:'VT323',monospace; font-size:17px; letter-spacing:2px; }
+    .viewer.hostile-view { background:#090406; }
+    .viewer.hostile-view .doc-title { color:#ff4444; }
+    .meta-table { margin:12px 0 16px; }
+    .meta-table tr td:first-child { color:var(--amber-d); padding-right:18px; white-space:nowrap; vertical-align:top; font-size:13px; }
+    .meta-table tr td:last-child { color:var(--white); font-size:13px; line-height:1.7; }
+    .tx-block { background:rgba(200,155,20,0.04); border:1px solid var(--border-md); border-left:2px solid var(--amber-d); padding:12px 16px; margin:14px 0; font-size:13px; color:var(--white); line-height:1.8; }
+    .tx-block .tx-label { font-family:'VT323',monospace; font-size:14px; letter-spacing:2px; color:var(--amber-d); display:block; margin-bottom:6px; }
+    @media(max-width:768px) {
+      .sidebar { position:fixed; top:var(--bar-h); left:0; bottom:0; z-index:500; transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .menu-btn { display:block; }
+      .viewer { padding:22px 18px 50px; }
+      .topbar-right { display:none; }
+      .doc-meta { flex-direction:column; }
+      .doc-meta-cell { border-right:none; border-bottom:1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<div class='topbar'>
+  <div class='topbar-left'>
+    <button class='menu-btn' id='menuBtn'>MENU</button>
+    <div class='topbar-title'>
+      <a href='index.html'>&lt; BACK</a>
+      PROJECT RELAY // FRACTURED ARCHIVE
+    </div>
+  </div>
+  <div class='topbar-right'>
+    <span><span class='status-dot dot-green'></span>ARCHIVE: ONLINE</span>
+    <span><span class='status-dot dot-red'></span>RELAY-PM: AT LARGE</span>
+    <span style='color:var(--amber-d)'>ADMIN: RYU HUNTER</span>
+  </div>
+</div>
+
+<div class='layout'>
+  <aside class='sidebar' id='sidebar'>
+    <div class='sidebar-header'>
+      <div style='font-family:"VT323",monospace;font-size:22px;letter-spacing:2px;color:var(--amber-b)'>FRACTURED ARCHIVE</div>
+      <p>NODE: ARCHIVE-7 // SECURE</p>
+    </div>
+    <div id='filetree'></div>
+    <div class='sidebar-footer'>
+      &gt; SELECT A FILE TO VIEW<br>
+      &gt; ENTRIES: <span id='entry-count'>...</span> LOADED
+    </div>
+  </aside>
+
+  <main class='viewer' id='viewer'>
+    <div class='welcome'>
+      <span class='big' style='font-size:22px;'>LOADING ARCHIVE...</span>
+      <p>&gt; FETCHING DATABASE FILES...</p>
+    </div>
+  </main>
+</div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const viewer  = document.getElementById('viewer');
+  const tree    = document.getElementById('filetree');
+  const menuBtn = document.getElementById('menuBtn');
+  let   entries = [];
+
+  async function loadArchive() {
+    try {
+      const idx  = await fetch('./databasefiles/index.json');
+      const list = await idx.json();
+      entries    = await Promise.all(list.map(f => fetch('./databasefiles/' + f).then(r => r.json())));
+      document.getElementById('entry-count').textContent = entries.length;
+      buildTree();
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        const el = document.querySelector('.file-item[data-id="' + hash + '"]');
+        if (el) el.click();
+      } else {
+        showWelcome();
+      }
+    } catch(e) {
+      viewer.innerHTML = '<div class="welcome"><span class="big" style="color:var(--red);font-size:22px;">ARCHIVE LOAD FAILURE</span><p style="margin-top:8px;color:var(--red);">&gt; COULD NOT REACH DATABASE FILES.</p><p style="margin-top:6px;">&gt; ENSURE /databasefiles/index.json IS PRESENT AND POPULATED.</p></div>';
+    }
+  }
+
+  function buildTree() {
+    const cats = {};
+    entries.forEach(e => { if (!cats[e.category]) cats[e.category] = []; cats[e.category].push(e); });
+    tree.innerHTML = '';
+    Object.keys(cats).forEach(cat => {
+      const grp = document.createElement('div');
+      grp.className = 'cat-group';
+      const title = document.createElement('span');
+      title.className = 'cat-title';
+      title.textContent = '// ' + cat;
+      grp.appendChild(title);
+      cats[cat].forEach(entry => {
+        const item = document.createElement('div');
+        item.className = 'file-item' + (entry.hostile ? ' hostile' : '');
+        item.dataset.id = entry.id;
+        const icon = document.createElement('span');
+        icon.className = 'f-icon';
+        icon.textContent = '>';
+        const name = document.createElement('span');
+        name.textContent = entry.file;
+        item.appendChild(icon);
+        item.appendChild(name);
+        if (entry.hostile) {
+          const badge = document.createElement('span');
+          badge.className = 'hostile-badge';
+          badge.textContent = '[!]';
+          item.appendChild(badge);
+        }
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          loadDoc(entry.id);
+          if (window.innerWidth <= 768) sidebar.classList.remove('open');
+        });
+        grp.appendChild(item);
+      });
+      tree.appendChild(grp);
+    });
+  }
+
+  function showWelcome() {
+    viewer.innerHTML = '<div class="welcome"><span class="big">SELECT A FILE</span><p>&gt; Use the file tree to navigate the archive.</p><p>&gt; Files authored by RYU HUNTER and RELAY-02.</p><p>&gt; Classification levels: RESTRICTED / BEYOND BLACK / OMEGA BLACK.</p><br><p style="color:var(--red);font-size:13px;">&gt; WARNING: File RELAY-PM.threat contains information on an active hostile entity. Exercise caution.</p></div>';
+  }
+
+  function loadDoc(id) {
+    const entry = entries.find(e => e.id === id);
+    if (!entry) return;
+    entry.hostile ? viewer.classList.add('hostile-view') : viewer.classList.remove('hostile-view');
+    const ck = entry.classification.replace(/\s+/g, '-');
+    viewer.innerHTML = '<div class="doc"><div class="doc-class-bar class-' + ck + '">CLASSIFICATION: ' + entry.classification + ' &nbsp;&nbsp;&nbsp; STATUS: ' + entry.status + '</div><div class="doc-meta"><div class="doc-meta-cell">DOC ID: <span>' + entry.docId + '</span></div><div class="doc-meta-cell">DATE: <span>' + entry.date + '</span></div><div class="doc-meta-cell">AUTHOR: <span>' + entry.author + '</span></div></div><div class="doc-title">' + entry.file.replace(/\..+$/, '').replace(/_/g, ' ') + '</div><hr class="doc-div"><div class="doc-content">' + entry.content + '</div></div>';
+    viewer.scrollTop = 0;
+    window.location.hash = id;
+  }
+
+  menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+  viewer.addEventListener('click', () => { if (window.innerWidth <= 768) sidebar.classList.remove('open'); });
+
+  loadArchive();
+</script>
+</body>
+</html>

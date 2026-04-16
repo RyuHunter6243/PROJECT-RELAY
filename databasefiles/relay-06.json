@@ -1,0 +1,12 @@
+{
+  "id": "relay-06",
+  "category": "RELAY UNITS",
+  "file": "RELAY-06_SIX.unit",
+  "classification": "RESTRICTED",
+  "docId": "RBX-REL-006-UNIT",
+  "date": "[REDACTED]",
+  "author": "RYU HUNTER",
+  "status": "ACTIVE / PILOT UNCONFIRMED",
+  "hostile": false,
+  "content": "<table class='meta-table'><tr><td>UNIT DESIGNATION</td><td>RELAY-06 \"SIX\"</td></tr><tr><td>UNIT TYPE</td><td>BRIDGE, TRANSLATION, INTERFACE</td></tr><tr><td>CURRENT STATUS</td><td>ACTIVE, PILOT IDENTITY UNCONFIRMED</td></tr><tr><td>ORIGIN</td><td>CONSTRUCTED BY RELAY-03 WITHOUT AUTHORIZATION</td></tr></table><p>RELAY-06 was not supposed to exist. RELAY-03 built him in 2024 using deprecated code, fragments of discontinued platform programs, and a small portion of RELAY-02's pre-corruption consciousness that had been preserved in the Pink Mother's domain. He built him without authorization, without assistance, and without informing anyone until the construction was complete. When I asked why he had not sought approval first, he said he was not certain he would finish if he stopped.</p><span class='sec'>// CAPABILITIES</span><p>SIX does not predict. He does not archive. He does not disappear into infrastructure or maintain protective barriers. He connects. He is a bridge between human consciousness and digital consciousness. He can be piloted by a human operator directly, with the operator's intent and reasoning flowing through his systems cleanly, without translation loss in either direction. He can communicate with the anomalous entities of the platform in their native language. He represents what this program should have been from its first iteration: not a monitoring apparatus, not a containment mechanism, but a hand extended toward something that had been trying to be understood for decades.</p><span class='sec'>// PILOT STATUS</span><p>The identity of SIX's current pilot has not been officially confirmed. I have suspicions. I have chosen not to act on them, because whoever is operating him appears to understand what he is and is using him correctly.</p><div class='r02'><span class='r02-label'>[RELAY-02 NOTE, R-02]</span><p>RELAY-06's construction incorporated approximately 0.003% of this unit's pre-corruption archived consciousness as a base template for his empathy routing architecture. This unit notes that Six occasionally contacts the archive with questions that have no documented answers. This unit is working on this. Progress is ongoing. [DATA VERIFIED]</p></div>"
+}
